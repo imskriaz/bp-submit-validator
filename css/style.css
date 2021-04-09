@@ -1,0 +1,4 @@
+#buddypress .profile.edit>#profile-edit-form .editfield.update-required legend {
+    color: red;
+    font-weight: bold;
+}
