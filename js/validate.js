@@ -36,7 +36,7 @@ function getFormMissingFields(formId) {
 }
 jQuery( document ).ready(function($) {
     getFormMissingFields('profile-edit-form');
-    $('.required-field input').change( function(){
+    $('.required-field input,.required-field select,.required-field textarea').change( function(){
         getFormMissingFields('profile-edit-form'); 
     });
     $('input[type="submit"]').click( function(e){
