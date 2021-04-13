@@ -1,3 +1,17 @@
+function getFullName (){
+	var fname = jQuery('#field_1').val(), lname = jQuery('#field_5142').val();
+	return fname.charAt(0).toUpperCase() + fname.slice(1) + ' ' + lname.charAt(0).toUpperCase() + lname.slice(1);
+}
+
+jQuery("#field_1").keyup(function(){
+	if(jQuery("#field_5143").val() == '') jQuery("#field_5143").val(getFullName());
+});
+
+jQuery("#field_5142").keyup(function(){
+	if(jQuery("#field_5143").val() == '') jQuery("#field_5143").val(getFullName());
+  
+});
+
 function getFormMissingFields(formId) {
     var missingFields = [];
     var formParams = {};
@@ -13,17 +27,27 @@ function getFormMissingFields(formId) {
     });
     
     let field_ids = formParams.field_ids.split(',');
-    
     field_ids.forEach(el => {
         if(jQuery(".field_" + el).hasClass('required-field')){
             if(formParams["field_" + el]) {
-                if(formParams["field_" + el].length === 0) {
+                if(formParams["field_" + el].length === 0 ) {
                     missingFields.push(el);
                 } else {
                     jQuery(".field_" + el).removeClass('update-required');
                 }
             } else {
-                missingFields.push(el);
+                if(jQuery(".field_" + el).hasClass('field_type_datebox')){
+                    jQuery(".field_" + el).find('input,select').each((i, elChild) => {
+                        if(formParams[elChild.id].length === 0 && missingFields.indexOf(el) == -1){
+                            missingFields.push(el);
+                        } else {
+                            jQuery(".field_" + el).removeClass('update-required');
+                        }
+                    });
+                } else {
+                    console.log(el);
+                    missingFields.push(el);
+                }
             }
         }
     });
@@ -31,7 +55,7 @@ function getFormMissingFields(formId) {
     missingFields.forEach(el => {
         jQuery(".field_" + el).addClass('update-required');
     });
-    
+    console.log(formParams,missingFields);
     return missingFields;
 }
 jQuery( document ).ready(function($) {
@@ -48,8 +72,8 @@ jQuery( document ).ready(function($) {
             });
             alert(error.slice(0,-2) + ' before submit the form');
             document.querySelector('.field_' + missingFields[0]).scrollIntoView(true);
-            window.scrollBy(0,-100);
-            document.querySelector('.field_' + missingFields[0]).focus();
+            window.scrollBy(0,-150);
+            
             return false;
         }
     });
